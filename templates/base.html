@@ -1,0 +1,50 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- CSS only -->
+
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+    <style>
+        {% block style %}{% endblock %}
+    </style>
+    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+    <!-- Главная страница -->
+    <div id="main_block">
+        <header>
+            <h1 class="shadow">
+                {% block header %}{% endblock %}
+            </h1>
+        </header>
+
+        <div class="page-header">
+            {% block menu %}{% endblock %}
+        </div>
+        <p class="shadow">
+            {% block top %}{% endblock %}
+        </p>
+
+        <div class="container">
+            {% block center %}{% endblock %}
+        </div>
+
+        <a href="/#Reserve">
+            <div class="shadow" id="reserve_button" onclick="">Забронировать</div>
+        </a>
+        {% block bottom %}{% endblock %}
+    </div>
+
+<footer>
+    &copy; 2026 Котокафе Мотя
+</footer>
+    <script src="/static/script.js"></script>
+</body>
+</html>
