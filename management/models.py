@@ -24,3 +24,12 @@ class Visitors(CustomUser):
     class Meta:
         verbose_name_plural = "Посетитель"
 
+
+class Menu(models.Model):
+    name = models.CharField(max_length=100, verbose_name = 'Название')
+    cost = models.IntegerField(max_length=100, verbose_name = 'Цена')
+    about = models.TextField(max_length= 400, verbose_name = 'Описание')
+    category = models.CharField(max_length= 100, verbose_name = 'Категория')
+    class Meta:
+        verbose_name = 'Ассортимент'
+
