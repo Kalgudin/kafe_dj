@@ -1,51 +1,63 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.template.loader import get_template
 from django.views import View
+
+from management.models import Product, Category
 from .forms import RegistrationForm
 
 def index(request):
-    context = {'title': 'Котокафе Мотя',
+    main_center_html = get_template("parts/main_center.html").render() # передаем блок из файла для контекста
+    reserve_html = get_template("parts/reserve.html").render()
+
+    context = {'title': 'Котокафе "Мотя"',
                'description': '''
     Здесь можно выпить чаю и уютно провести время в
 окружении пушистых друзей. А если вы с кем-то из них
 по-настоящему подружились - можете усыновить нового
 друга в свою семью''',
                'head': 'Добро пожаловать в Кото-кафе "Мотя"!',
-               'menu': '''
-    <div class="top_menu">
-        <a href="/"><div class="selected shadow top_menu_items">Главная</div></a>
-        <a href="menu"><div class="shadow top_menu_items">Меню</div></a>
-        <a href="contact"><div class="shadow top_menu_items">Контакты</div></a>
-    </div>''',
-               'center': '''
-    <div class="shadow box">
-        <img src="static/img/kafe1.jpg"/>
-        <p>50+ котиков живут в кото-кафе</p>
-    </div>
-    <div class="shadow box">
-        <p>350+ котиков нашли себе дом</p>
-        <img src="static/img/kafe2.jpg"  style="float: right;"/>
-    </div>
-    <div class="shadow box">
-        <img src="static/img/kafe3.jpg"  style="float: right;"/>
-        <p>Нашему кафе уже 2 года</p>
-    </div>''',
-               'bottom': '''
-    <div id="Reserve">
-        <h2>Бронирование</h2>
-    </div>'''}
+               'center': main_center_html,
+               'bottom': reserve_html,
+               'main_selected': 'selected',}
+    return render(request, 'index.html', context)
+
+def menu(request):
+    center_context = products_by_category() # можно передавать в контекст и в parts
+    menu_center_html = get_template("parts/menu_center.html").render(center_context)
+
+    context = {'title': 'Котокафе "Мотя"',
+               'description': '''У нас много разных вкусняшек для вас и ваших питомцев''',
+               'head': 'Меню от "Моти"',
+               'center': menu_center_html,
+               'menu_selected': 'selected',}
     return render(request, 'index.html', context)
 
 
-
-def menu(request):
-    context = {'title': 'Котокафе Мотя', 'description': 'Some Description'}
-    return render(request, 'menu.html', context)
-
-
 def contact(request):
-    context = {'title': 'Котокафе Мотя', 'description': 'Some Description'}
-    return render(request, 'contact.html', context)
+    center_context = {'bake': "----Выпечка-----"} # можно передавать в контекст и в parts
+    context_center_html = get_template("parts/contact_center.html").render(center_context)
+
+    context = {'title': 'Контакты "Моти"',
+               'contact_selected': 'selected',
+               'description': '''Ждем вас в гости''',
+               'head': 'Контакты "Моти"',
+               'center': context_center_html,
+               }
+    return render(request, 'index.html', context)
+
+###############################################################################
+
+def products_by_category():
+    """Вывод продуктов по категориям"""
+    categories = Category.objects.prefetch_related('products').all()
+    products = Product.objects.select_related('category').all()
+    context = {
+        'categories': categories,
+        'products': products
+    }
+    return context
+
 
 
 # ////////////////////////////////////////////////////
@@ -70,19 +82,6 @@ class RegistrationView(View):
 def login(request):
     context = {'title': 'Котокафе Мотя',
                'description': '''LOGIN''',
-               'head': 'LOGIN в Кото-кафе "Мотя"!',
-               'menu': '''
-    <div class="top_menu">
-        <a href="/"><div class="selected shadow top_menu_items">Главная</div></a>
-        <a href="menu"><div class="shadow top_menu_items">Меню</div></a>
-        <a href="contact"><div class="shadow top_menu_items">Контакты</div></a>
-    </div>''',
-               'center': '''LOGIN''',
-               'bottom': '''
-    <div id="Reserve">
-        <h2>Бронирование</h2>
-    </div>'''}
+               'head': 'LOGIN в Кото-кафе "Мотя"!',}
     return render(request, 'index.html', context)
-
-
 

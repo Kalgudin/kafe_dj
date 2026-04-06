@@ -1,6 +1,8 @@
 from django.shortcuts import render
 
 
+
+
 def main(request):
     context = {'title': 'main',
                'description': 'main description',
@@ -8,4 +10,9 @@ def main(request):
 
                }
     return render(request, 'management.html', context)
+
+#############################################################################################
+
+
+#############################################################################################
 

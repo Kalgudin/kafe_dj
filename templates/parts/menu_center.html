@@ -1,0 +1,43 @@
+
+<div class="shadow box">
+
+    {% for category in categories %}
+        <div class="category-section">
+            <h2 class="category-title">{{ category.name }}</h2>
+
+            {% with products=category.products.all %}
+                {% if products %}
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Название</th>
+                                <th>Цена</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in products %}
+                                <tr>
+                                    <td>{{ product.name }}</td>
+                                    <td class="price">{{ product.price }} ₽</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="empty-message">
+                        В этой категории пока нет продуктов
+                    </div>
+                {% endif %}
+            {% endwith %}
+        </div>
+    {% empty %}
+        <div class="empty-message">
+            Категории не найдены
+        </div>
+    {% endfor %}
+</div>
+
+
+
+

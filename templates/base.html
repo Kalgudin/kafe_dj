@@ -26,7 +26,13 @@
         </header>
 <a href="/register"><div>REGISTER</div></a>
         <div class="page-header">
-            {% block menu %}{% endblock %}
+
+            <div class="top_menu">
+                <a href="/"><div class="{{ main_selected }} shadow top_menu_items">Главная</div></a>
+                <a href="menu"><div class="{{ menu_selected }} shadow top_menu_items">Меню</div></a>
+                <a href="contact"><div class="{{ contact_selected }} shadow top_menu_items">Контакты</div></a>
+            </div>
+
         </div>
         <p class="shadow">
             {% block top %}{% endblock %}
@@ -39,7 +45,12 @@
         <a href="/#Reserve">
             <div class="shadow" id="reserve_button" onclick="">Забронировать</div>
         </a>
-        {% block bottom %}{% endblock %}
+
+        {% block bottom %}
+            {% autoescape off %}
+                {{ bottom }}
+            {% endautoescape %}
+        {% endblock %}
     </div>
 
 <footer>

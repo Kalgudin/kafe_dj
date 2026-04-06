@@ -25,11 +25,29 @@ class Visitors(CustomUser):
         verbose_name_plural = "Посетитель"
 
 
-class Menu(models.Model):
-    name = models.CharField(max_length=100, verbose_name = 'Название')
-    cost = models.IntegerField(max_length=100, verbose_name = 'Цена')
-    about = models.TextField(max_length= 400, verbose_name = 'Описание')
-    category = models.CharField(max_length= 100, verbose_name = 'Категория')
+class Category(models.Model):
+    name = models.CharField('Название категории', max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
     class Meta:
-        verbose_name = 'Ассортимент'
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
+        ordering = ['name']
+
+
+class Product(models.Model):
+    name = models.CharField('Название продукта', max_length=200)
+    price = models.DecimalField('Цена', max_digits=10, decimal_places=2)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', verbose_name='Категория')
+
+    def __str__(self):
+        return f"{self.name} - {self.price} руб."
+
+    class Meta:
+        verbose_name = 'Продукт'
+        verbose_name_plural = 'Продукты'
+        ordering = ['category', 'name']
+
 
