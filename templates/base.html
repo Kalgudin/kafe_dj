@@ -24,13 +24,37 @@
                 {% block header %}{% endblock %}
             </h1>
         </header>
-<a href="/register"><div>REGISTER</div></a>
+        <div class = "user_panels ">
+
+            {% if user.is_authenticated %}
+                <div class="welcome-message">
+                    <p>Добро пожаловать, {{ user.username }}!</p>
+                    <a href="/logout"><div>LOGOUT</div></a>
+
+                    <!-- Если админ, то показываем кнопку входа в панель администратора -->
+                    {% if user.is_superuser %}<a href="/admin"><div>ADMIN</div></a>
+                    <!-- Если сотрудник, тоже показываем кнопку входа в панель администратора -->
+                    {% elif user.is_staff %}<a href="/admin"><div>ADMIN</div></a>
+                    {% endif %}
+
+                </div>
+            {% else %}
+                <div class="welcome-message">
+                    <!-- Если не авторизован - предлагаем зарегистрироваться или залогиниться -->
+                    <p>Добро пожаловать, гость!</p>
+                    <a href="/register"><div>REGISTER</div></a>
+                    <a href="/login"><div>LOGIN</div></a>
+                </div>
+            {% endif %}
+
+
+        </div >
         <div class="page-header">
 
             <div class="top_menu">
                 <a href="/"><div class="{{ main_selected }} shadow top_menu_items">Главная</div></a>
-                <a href="menu"><div class="{{ menu_selected }} shadow top_menu_items">Меню</div></a>
-                <a href="contact"><div class="{{ contact_selected }} shadow top_menu_items">Контакты</div></a>
+                <a href="/menu"><div class="{{ menu_selected }} shadow top_menu_items">Меню</div></a>
+                <a href="/contact"><div class="{{ contact_selected }} shadow top_menu_items">Контакты</div></a>
             </div>
 
         </div>

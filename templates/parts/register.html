@@ -1,0 +1,69 @@
+
+    <div class="register-container">
+        <div class="register-header">
+            <h2>Регистрация</h2>
+            <p class="text-muted">Создайте новый аккаунт</p>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}" class="form-label">
+                        {{ field.label }}
+                        {% if field.field.required %}
+                            <span class="text-danger">*</span>
+                        {% endif %}
+                    </label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% if field.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ field.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-register">Зарегистрироваться</button>
+        </form>
+
+        <div class="login-link">
+            <p>Уже есть аккаунт?
+                <a href="{% url 'login' %}">Войти</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+{#    <script>#}
+{#        // Маска для телефона (опционально)#}
+{#        document.addEventListener('DOMContentLoaded', function() {#}
+{#            const phoneInput = document.querySelector('#id_phone');#}
+{#            if (phoneInput) {#}
+{#                phoneInput.addEventListener('input', function(e) {#}
+{#                    let value = e.target.value.replace(/\D/g, '');#}
+{#                    if (value.length > 11) value = value.slice(0, 11);#}
+{#                    let formatted = '';#}
+{#                    if (value.length > 0) formatted = '+7';#}
+{#                    if (value.length > 1) formatted += ' (' + value.slice(1, 4);#}
+{#                    if (value.length > 4) formatted += ') ' + value.slice(4, 7);#}
+{#                    if (value.length > 7) formatted += '-' + value.slice(7, 9);#}
+{#                    if (value.length > 9) formatted += '-' + value.slice(9, 11);#}
+{#                    e.target.value = formatted;#}
+{#                });#}
+{#            }#}
+{#        });#}
+{#    </script>#}

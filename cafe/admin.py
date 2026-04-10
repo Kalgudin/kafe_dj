@@ -1,7 +1,29 @@
-from cafe.models import Client
+
+from cafe.models import CustomUser, Staff, Visitors, Category, Product
+
 from django.contrib import admin
 
 
-@admin.register(Client)
-class ClientAdmin(admin.ModelAdmin):
+@admin.register(CustomUser)
+class CustomUserAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Staff)
+class StaffAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Visitors)
+class VisitorsAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
     pass

@@ -133,7 +133,9 @@ div img {
     background-color: #c85173;
     box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.5);
 }
-
+/*.price {*/
+/*    text-align: right;*/
+/*}*/
 footer {
     position: fixed;
     bottom: 0;

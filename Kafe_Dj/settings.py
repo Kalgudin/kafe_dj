@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'management',
     'cafe',
 ]
 
@@ -120,11 +119,15 @@ USE_TZ = True
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_URL = '/static/'
-LOGIN_REDIRECT_URL = '/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-MEDIA_URL = '/media/'
+# URL для перенаправления после входа/выхода
+LOGIN_URL = 'login'  # Страница входа
+LOGOUT_REDIRECT_URL = 'login'  # Куда перенаправлять после выхода
+LOGIN_REDIRECT_URL = '/'  # Куда перенаправлять после успешного входа
+
 # //////////////////////////////
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
     messages.SUCCESS: 'success',
 }
+
+

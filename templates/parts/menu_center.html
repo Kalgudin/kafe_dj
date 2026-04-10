@@ -10,7 +10,6 @@
                     <table class="products-table">
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Название</th>
                                 <th>Цена</th>
                             </tr>
@@ -19,7 +18,7 @@
                             {% for product in products %}
                                 <tr>
                                     <td>{{ product.name }}</td>
-                                    <td class="price">{{ product.price }} ₽</td>
+                                    <td class="price"  style="text-align: right;">{{ product.price }} ₽</td>
                                 </tr>
                             {% endfor %}
                         </tbody>

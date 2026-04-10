@@ -1,6 +1,7 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
-from .models import Client
+from .models import CustomUser, Visitors
 import re
 
 
@@ -22,10 +23,10 @@ class RegistrationForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Client
-        fields = ['login', 'first_name', 'last_name', 'phone']
+        model = Visitors
+        fields = ['username', 'first_name', 'last_name', 'phone']
         widgets = {
-            'login': forms.TextInput(attrs={
+            'username': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Введите логин'
             }),
@@ -43,7 +44,7 @@ class RegistrationForm(forms.ModelForm):
             }),
         }
         labels = {
-            'login': 'Логин',
+            'username': 'Логин',
             'first_name': 'Имя',
             'last_name': 'Фамилия',
             'phone': 'Телефон',
@@ -51,12 +52,12 @@ class RegistrationForm(forms.ModelForm):
 
     def clean_login(self):
         """Валидация логина"""
-        login = self.cleaned_data.get('login')
-        if Client.objects.filter(login=login).exists():
+        username = self.cleaned_data.get('username')
+        if Visitors.objects.filter(username=username).exists():
             raise ValidationError('Пользователь с таким логином уже существует')
-        if len(login) < 3:
+        if len(username) < 3:
             raise ValidationError('Логин должен содержать минимум 3 символа')
-        return login
+        return username
 
 
     def clean_password(self):
@@ -64,10 +65,6 @@ class RegistrationForm(forms.ModelForm):
         password = self.cleaned_data.get('password')
         if len(password) < 6:
             raise ValidationError('Пароль должен содержать минимум 6 символов')
-        if not re.search(r'[A-Za-z]', password):
-            raise ValidationError('Пароль должен содержать хотя бы одну букву')
-        if not re.search(r'[0-9]', password):
-            raise ValidationError('Пароль должен содержать хотя бы одну цифру')
         return password
 
 
@@ -78,10 +75,10 @@ class RegistrationForm(forms.ModelForm):
         phone_clean = re.sub(r'\D', '', phone)
 
         if len(phone_clean) < 10:
-            raise ValidationError('Введите корректный    номер телефона')
+            raise ValidationError('Введите корректный номер телефона')
 
         # Проверяем уникальность телефона
-        if Client.objects.filter(phone=phone).exists():
+        if CustomUser.objects.filter(phone=phone).exists():
             raise ValidationError('Пользователь с таким телефоном уже зарегистрирован')
 
         return phone
@@ -105,5 +102,33 @@ class RegistrationForm(forms.ModelForm):
         user.set_password(self.cleaned_data['password'])
 
         if commit:
-            user.save()
+            try:
+                user.save()
+            except Exception as e:
+                raise ValidationError(f'Ошибка данных: {str(e)}')
+
         return user
+
+class CustomLoginForm(AuthenticationForm):
+    error_messages = {
+        'invalid_login': 'Неверное имя пользователя или пароль.',
+        'inactive': 'Этот аккаунт неактивен.',
+    }
+    class Meta:
+        model = Visitors
+        fields = ['username', 'password']
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите логин'
+            }),
+            'password': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите пароль'
+            }),
+        }
+        labels = {
+            'username': 'Логин',
+            'password': 'Пароль',
+        }
+
